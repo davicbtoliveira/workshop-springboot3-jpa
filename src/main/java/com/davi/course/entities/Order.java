@@ -1,5 +1,8 @@
 package com.davi.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,7 +15,9 @@ public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant date;
 
     @ManyToOne
@@ -21,17 +26,17 @@ public class Order implements Serializable {
 
     public Order() {}
 
-   public Order(int id, Instant date, User client) {
+   public Order(Long id, Instant date, User client) {
         this.id = id;
         this.date = date;
         this.client = client;
    }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
