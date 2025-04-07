@@ -1,5 +1,6 @@
 package com.davi.course.entities;
 
+import com.davi.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +19,9 @@ public class Order implements Serializable {
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private Instant date;
+    private Instant moment;
+
+    private Integer status;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -26,11 +29,22 @@ public class Order implements Serializable {
 
     public Order() {}
 
-   public Order(Long id, Instant date, User client) {
+   public Order(Long id, Instant moment, OrderStatus status,User client) {
         this.id = id;
-        this.date = date;
+        this.moment = moment;
+        setStatus(status);
         this.client = client;
    }
+
+    public OrderStatus getStatus() {
+        return OrderStatus.getByCode(status);
+    }
+
+    public void setStatus(OrderStatus status) {
+        if(status != null) {
+            this.status = status.getCode();
+        }
+    }
 
     public Long getId() {
         return id;
@@ -40,12 +54,12 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public Instant getDate() {
-        return date;
+    public Instant getMoment() {
+        return moment;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public User getClient() {
